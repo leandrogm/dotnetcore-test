@@ -30,8 +30,6 @@ import { ServicosComponent } from './servicos/servicos.component';
     ApiAuthorizationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
       { path: 'servicos', component: ServicosComponent, canActivate: [AuthorizeGuard] },
     ])
   ],

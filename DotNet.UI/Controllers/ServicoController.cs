@@ -50,6 +50,8 @@ namespace DotNet.UI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            // todo mover lógica para projeto business e criar padrão CQRS para segmentar lógica de queries e commands
+            // todo testes de integração
             var request = new RestRequest(@"http://virtserver.swaggerhub.com/finch/avaliacao/1.0.0/fila", Method.GET);
             var response = _restClient.Execute<List<Servico>>(request);
             var ServicoFromClient = response.Data;
@@ -60,7 +62,7 @@ namespace DotNet.UI.Controllers
                 if (servicoExistente == null)
                 {
                     servico.Status = StatusEnum.Pendente;
-                    //Servico.UserId = _userManager.GetUserId(ClaimsPrincipal.Current);
+                    //Servico.UserId = _userManager.GetUserId(ClaimsPrincipal.Current); //todo pegar id do usuário logado
                     var tipoServico = _tipoRepository.SingleOrDefault(x => x.Id == servico.Tipo.Id);
                     if (tipoServico == null)
                     {
@@ -85,6 +87,8 @@ namespace DotNet.UI.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult Get(Guid id)
         {
+            // todo mover lógica para projeto business e criar padrão CQRS para segmentar lógica de queries e commands
+            // todo testes de integração
             var result = _ServicoRepository.SingleOrDefault(x => x.Id == id);
             return Ok(result);
         }
@@ -92,9 +96,11 @@ namespace DotNet.UI.Controllers
         [HttpPatch("{id:guid}/status/{status}")]
         public IActionResult Patch(Guid id, [FromRoute] int status)
         {
+            // todo mover lógica para projeto business e criar padrão CQRS para segmentar lógica de queries e commands
+            // todo testes de integração
             var servico = _ServicoRepository.SingleOrDefault(x =>
                 x.Id == id &&
-                x.Status != StatusEnum.Finalizado // adicionar condicao se o id do usuario for igual ao local ou null
+                x.Status != StatusEnum.Finalizado //todo adicionar condicao se o id do usuario for igual ao local ou null
             );
 
             var newStatus = (StatusEnum)status;
@@ -119,6 +125,7 @@ namespace DotNet.UI.Controllers
 
         private Task<IRestResponse> SendEmailFinalizacao(Servico servico)
         {
+            // todo mover lógica para projeto business e criar padrão CQRS para segmentar lógica de queries e commands
             _restClient.BaseUrl = new Uri(_emailSettings.ApiBaseUri);
             _restClient.Authenticator =
                     new HttpBasicAuthenticator("api",

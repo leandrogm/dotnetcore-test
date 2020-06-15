@@ -1,14 +1,15 @@
 # dotnetcore-test
 
 ## Requisitos
+
 - dotnet core sdk 3.1
-- [chocolatey](https://chocolatey.org/)
 - entity framework global
 ---
 ### Instalação:
-- choco install dotnetcore-sdk 
+- [instalar dotnet sdk](https://dotnet.microsoft.com/download/dotnet-core/3.1)
 - dotnet tool install --global dotnet-ef
 - dotnet ef database update
+- dotnet dev-certs https --trust
 
 ---
 ## Execução:
