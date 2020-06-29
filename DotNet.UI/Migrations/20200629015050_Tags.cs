@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DotNet.UI.Migrations
 {
-    public partial class Servico : Migration
+    public partial class Tags : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -81,16 +81,17 @@ namespace DotNet.UI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tipo",
+                name: "Tag",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false),
-                    Descricao = table.Column<string>(nullable: true),
-                    Valor = table.Column<double>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Key = table.Column<string>(nullable: true),
+                    Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tipo", x => x.Id);
+                    table.PrimaryKey("PK_Tag", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,7 +99,7 @@ namespace DotNet.UI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -119,7 +120,7 @@ namespace DotNet.UI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -199,34 +200,31 @@ namespace DotNet.UI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Servico",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Cliente = table.Column<string>(nullable: true),
-                    DataAgendamento = table.Column<DateTime>(nullable: false),
-                    Observacao = table.Column<string>(nullable: true),
-                    TipoId = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    Status = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Servico", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Servico_Tipo_TipoId",
-                        column: x => x.TipoId,
-                        principalTable: "Tipo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Servico_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
+            migrationBuilder.InsertData(
+                table: "Tag",
+                columns: new[] { "Id", "Key", "Value" },
+                values: new object[] { 1, "Colesterol Alto", @"O nível de colesterol alto está diretamente ligado ao consumo excessivo de alimentos gordurosos. 
+                                    Esse fator é muito prejudicial à saúde, pode levar ao infarto, e ainda aumenta o risco para o surgimento de doenças cardiovasculares.
+                                    Segundo levantamento feito pelo IBGE, pelo menos 12,5% dos brasileiros, ou seja, 18,4 milhões de pessoas no país, 
+                                    já foram diagnosticas com colesterol Alto." });
+
+            migrationBuilder.InsertData(
+                table: "Tag",
+                columns: new[] { "Id", "Key", "Value" },
+                values: new object[] { 2, "DPOC (Doença pulmonar obstrutiva crônica)", @"Também chamada de enfisema ou bronquite crônica, a doença pulmonar obstrutiva crônica,
+                                    é uma doença que causa dificuldades respiratórias pois provoca inflamação nos brônquios. 
+                                    Também pode provocar tosse e catarro.
+                                    Ela geralmente é ocasionada devido a constante inalação de fumaça ou gases que prejudicam a saúde, 
+                                    em função disso é muito comum entre os fumantes." });
+
+            migrationBuilder.InsertData(
+                table: "Tag",
+                columns: new[] { "Id", "Key", "Value" },
+                values: new object[] { 3, "Hipertensão", @"Hipertensão ou simplesmente pressão alta como é popularmente chamada, é uma doença que contrai os vasos sanguíneos, 
+                                    forçando assim o coração a se esforçar mais em sua função.
+                                    Os sintomas aparecem apenas quando a doença já prejudicou o organismo, incluem: dor de cabeça, tontura e mal-estar. 
+                                    A hipertensão é capaz de desencadear vários outros problemas como doenças cardiovasculares, colesterol elevado, 
+                                    infarto e derrame. Ao decorrer da pesquisa 31,3 milhões de pessoas afirmaram terem sido diagnosticadas com a doença." });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -237,8 +235,7 @@ namespace DotNet.UI.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -264,8 +261,7 @@ namespace DotNet.UI.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -287,16 +283,6 @@ namespace DotNet.UI.Migrations
                 name: "IX_PersistedGrants_SubjectId_ClientId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "ClientId", "Type" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Servico_TipoId",
-                table: "Servico",
-                column: "TipoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Servico_UserId",
-                table: "Servico",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -323,13 +309,10 @@ namespace DotNet.UI.Migrations
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
-                name: "Servico");
+                name: "Tag");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Tipo");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

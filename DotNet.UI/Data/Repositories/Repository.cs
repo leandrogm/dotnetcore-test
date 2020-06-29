@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,6 +25,7 @@ namespace DotNet.UI.Data.Repositories
         /// <param name="entity">Entity</param>
         public void Add(T entity)
         {
+            
             try
             {
                 _context.Add(entity);
@@ -105,6 +105,16 @@ namespace DotNet.UI.Data.Repositories
         public IQueryable<T> Where(Expression<Func<T, bool>> filter)
         {
             return this._dbSet.Where<T>(filter);
+        }
+
+        /// <summary>
+        /// Get a collection of the entity based on expression
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public IEnumerable<T> GetAll()
+        {
+            return this._dbSet.ToList<T>();
         }
 
 

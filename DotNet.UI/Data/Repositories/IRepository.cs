@@ -61,6 +61,13 @@ namespace DotNet.UI.Data.Repositories
         /// <param name="filter"></param>
         /// <returns></returns>
         IQueryable<T> Where(Expression<Func<T, Boolean>> filter);
+        
+        
+        /// <summary>
+        /// Gets a collection of the entity
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<T> GetAll();
 
         /// <summary>
         /// comit the changes

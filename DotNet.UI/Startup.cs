@@ -63,8 +63,7 @@ namespace DotNet.UI
 
             services.AddScoped(typeof(IApplicationDbContext), typeof(ApplicationDbContext));
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped(typeof(IRepository<Servico>), typeof(Repository<Servico>));
+            services.AddScoped(typeof(IRepository<Tag>), typeof(Repository<Tag>));
             services.AddTransient(typeof(IRestClient), typeof(RestClient));
 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
